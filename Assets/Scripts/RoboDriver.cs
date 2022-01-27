@@ -38,22 +38,29 @@ public class RoboDriver : MonoBehaviour
 
         #region Raycasts
 
-            Vector3 right_vector = this.transform.up + this.transform.right;
+            Vector3 right_vector = this.transform.forward;
             Vector3 left_vector = this.transform.up - this.transform.right;
 
-            Debug.DrawRay(transform.position, right_vector, Color.green);
+            Debug.DrawRay(transform.position, right_vector * 10, Color.green);
             Debug.DrawRay(transform.position, left_vector, Color.green);
 
-            RaycastHit right_raycast, left_raycast;
+            RaycastHit right_raycast; //, left_raycast;
 
             if (Physics.Raycast(transform.position, right_vector, out right_raycast))
             {
-                Debug.Log("Found an object in the right side - distance: " + right_raycast.distance);
+                GameObject map_gameobject = right_raycast.transform.gameObject;
+                Texture2D map = map_gameobject.GetComponent<SpriteRenderer>().sprite.texture;
+
+                Debug.Log(map.GetPixel
+                (
+                    (int)right_raycast.point.x - (int)map_gameobject.transform.position.x + (int)(map.width / 2),
+                    (int)right_raycast.point.y - (int)map_gameobject.transform.position.y + (int)(map.height / 2)
+                ));
             }
-            if (Physics.Raycast(transform.position, left_vector, out left_raycast))
-            {
-                Debug.Log("Found an object in the left side - distance: " + left_raycast.distance);
-            }
+            //if (Physics.Raycast(transform.position, left_vector, out left_raycast))
+            //{
+                //Debug.Log("Found an object in the left side - distance: " + left_raycast.distance);
+            //}
 
         #endregion
 
@@ -69,8 +76,12 @@ public class RoboDriver : MonoBehaviour
             //Friction
             rb.velocity *= friction;
 
-            Debug.Log(actual_direction);
-
         #endregion
+    }
+
+    void Search_color_pyxel(Vector3 origin, Vector3 direction)
+    {
+        //use sprite api and texture2d api to check the color of pyxel
+
     }
 }
