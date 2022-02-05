@@ -56,6 +56,12 @@ public class RoboDriver : MonoBehaviour
                     (int)right_raycast.point.x - (int)map_gameobject.transform.position.x + (int)(map.width / 2),
                     (int)right_raycast.point.y - (int)map_gameobject.transform.position.y + (int)(map.height / 2)
                 ));
+
+                map.SetPixel(
+                    (int)right_raycast.point.x - (int)map_gameobject.transform.position.x + (int)(map.width / 2),
+                    (int)right_raycast.point.y - (int)map_gameobject.transform.position.y + (int)(map.height / 2),
+                    Color.cyan
+                );
             }
             //if (Physics.Raycast(transform.position, left_vector, out left_raycast))
             //{
