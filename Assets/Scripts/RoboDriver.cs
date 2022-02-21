@@ -39,19 +39,6 @@ public class RoboDriver : MonoBehaviour
 
         #region Raycasts
 
-            Vector2 right_vector = this.transform.up;
-            Vector3 left_vector = this.transform.up - this.transform.right;
-
-            Debug.DrawRay(transform.position, right_vector * 50, Color.green);
-            Debug.DrawRay(transform.position, left_vector, Color.green);
-
-            RaycastHit2D right_raycast = Physics2D.Raycast(transform.position, right_vector); //, left_raycast;
-            Debug.Log("Found an object in the forward side - distance: " + right_raycast.distance);
-            
-            //if (Physics.Raycast(transform.position, left_vector, out left_raycast))
-            //{
-                //Debug.Log("Found an object in the left side - distance: " + left_raycast.distance);
-            //}
 
         #endregion
 
@@ -68,5 +55,26 @@ public class RoboDriver : MonoBehaviour
             rb.velocity *= friction;
 
         #endregion
+    }
+
+    //change void to float
+    float NewRoboRay(Vector2 robovector)
+    {
+        //Draw the vector of the ray
+        Debug.DrawRay(transform.position, robovector, Color.green);
+
+        //Create the ray array
+        RaycastHit2D[] roboraycast = Physics2D.RaycastAll(transform.position, robovector); //, left_raycast;
+
+        if (roboraycast.Length >= 2)
+        {
+            Debug.Log("Found an object in the forward side - distance: " + roboraycast[1].distance);
+
+            return roboraycast.Length;
+        }
+        else
+        {
+            return 0;
+        }
     }
 }
