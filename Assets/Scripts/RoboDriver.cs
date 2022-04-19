@@ -1,7 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RoboDriver : MonoBehaviour
 {
@@ -15,8 +13,7 @@ public class RoboDriver : MonoBehaviour
     Vector3 actual_direction = new Vector3(0, 0, 0); 
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start(){
         //Components
         rb = gameObject.GetComponent<Rigidbody2D>();
     }
@@ -26,27 +23,29 @@ public class RoboDriver : MonoBehaviour
     {
         #region Rotation (inputs)
         
-            if (Input.GetKey(KeyCode.D))
-            {
+            if (Input.GetKey(KeyCode.D)){
                 transform.Rotate(-Vector3.forward * rotation_coefficient);
             }
-            else if (Input.GetKey(KeyCode.A))
-            {
+            else if (Input.GetKey(KeyCode.A)){
                 transform.Rotate(Vector3.forward * rotation_coefficient);
             }
 
         #endregion
 
         #region Raycasts
-
+            //All the Inputs of the Neural Network
+            NewRoboRay(transform.up);
+            NewRoboRay(transform.right);
+            NewRoboRay(-transform.right);
+            NewRoboRay(transform.up + transform.right);
+            NewRoboRay(transform.up - transform.right);
 
         #endregion
 
         #region Movement (inputs)
 
             //Acceleration
-            if (Input.GetKey(KeyCode.W))
-            {
+            if (Input.GetKey(KeyCode.W)){
                 actual_direction = transform.up;
                 rb.AddForce(actual_direction * thrust);
             }
@@ -57,19 +56,24 @@ public class RoboDriver : MonoBehaviour
         #endregion
     }
 
+    void OnTriggerEnter2D(Collider2D other) {
+        Debug.Log(other.gameObject.transform.parent.name);
+
+        if (other.gameObject.transform.parent.name == "Image Manager"){
+            SceneManager.LoadScene("SampleScene");
+        }
+    }
+
     //change void to float
-    float NewRoboRay(Vector2 robovector)
-    {
+    float NewRoboRay(Vector2 robovector){
         //Draw the vector of the ray
-        Debug.DrawRay(transform.position, robovector, Color.green);
+        Debug.DrawRay(transform.position, robovector.normalized * 20, Color.green);
 
         //Create the ray array
-        RaycastHit2D[] roboraycast = Physics2D.RaycastAll(transform.position, robovector); //, left_raycast;
+        RaycastHit2D[] roboraycast = Physics2D.RaycastAll(transform.position, robovector);
 
         if (roboraycast.Length >= 2)
         {
-            Debug.Log("Found an object in the forward side - distance: " + roboraycast[1].distance);
-
             return roboraycast.Length;
         }
         else
