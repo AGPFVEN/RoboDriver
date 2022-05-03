@@ -57,8 +57,6 @@ public class RoboDriver : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log(other.gameObject.transform.parent.name);
-
         if (other.gameObject.transform.parent.name == "Image Manager"){
             SceneManager.LoadScene("SampleScene");
         }
